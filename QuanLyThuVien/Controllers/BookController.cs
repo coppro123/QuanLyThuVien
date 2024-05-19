@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,16 +8,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLyThuVien.Data;
 using QuanLyThuVien.Models;
+using QuanLyThuVien.Repositories;
 
 namespace QuanLyThuVien.Controllers
 {
     public class BookController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public BookController(ApplicationDbContext context)
+        private readonly IBookRepository _bookRepository;
+        public BookController(ApplicationDbContext context, IBookRepository bookRepository)
         {
             _context = context;
+            _bookRepository = bookRepository;
         }
 
         // GET: Book
@@ -47,10 +50,13 @@ namespace QuanLyThuVien.Controllers
         }
 
         // GET: Book/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "Id", "Id");
-            ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
+            var categories = await _context.Categories.ToListAsync();
+            var publishers = await _context.Publishers.ToListAsync();
+
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+            ViewBag.Publishers = new SelectList(publishers, "Id", "Name");
             return View();
         }
 
@@ -58,20 +64,41 @@ namespace QuanLyThuVien.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Author,PublisherId,YearPublished,CategoryId,Quantity")] Book book)
+        public async Task<IActionResult> Add(Book book, IFormFile
+        imageUrl)
         {
             if (ModelState.IsValid)
             {
+                if (imageUrl != null)
+                {
+                    // Lưu hình ảnh đại diện tham khảo bài 02 hàm SaveImage
+                    book.ImageUrl = await SaveImage(imageUrl);
+                }
                 _context.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "Id", "Id", book.CategoryId);
-            ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name", book.PublisherId);
+
+            // Nếu ModelState không hợp lệ, hiển thị form với dữ liệu đã nhập
+            var categories = await _context.Categories.ToListAsync();
+            var publishers = await _context.Publishers.ToListAsync();
+
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+            ViewBag.Publishers = new SelectList(publishers, "Id", "Name");
+
             return View(book);
         }
 
+        private async Task<string> SaveImage(IFormFile image)
+        {
+            var savePath = Path.Combine("wwwroot/images", image.FileName); //
+
+            using (var fileStream = new FileStream(savePath, FileMode.Create))
+            {
+                await image.CopyToAsync(fileStream);
+            }
+            return "/images/" + image.FileName; // Trả về đường dẫn tương đối
+        }
         // GET: Book/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -85,7 +112,7 @@ namespace QuanLyThuVien.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "Id", "Id", book.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", book.CategoryId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name", book.PublisherId);
             return View(book);
         }
@@ -122,7 +149,7 @@ namespace QuanLyThuVien.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "Id", "Id", book.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", book.CategoryId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name", book.PublisherId);
             return View(book);
         }

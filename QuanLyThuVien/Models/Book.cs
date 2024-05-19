@@ -15,15 +15,17 @@ namespace QuanLyThuVien.Models
 		public string Author { get; set; }
 
 		public int PublisherId { get; set; }
-		public Publisher Publisher { get; set; }
+		public Publisher? Publisher { get; set; }
 
 		public int YearPublished { get; set; }
 
 		public int CategoryId { get; set; }
 
-		public Category Category { get; set; }
+		public Category? Category { get; set; }
 
 		public int Quantity { get; set; }
+
+		public string ImageUrl { get; set; }
 	}
 }
 

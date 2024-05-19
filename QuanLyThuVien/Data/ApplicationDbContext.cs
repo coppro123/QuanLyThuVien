@@ -15,6 +15,6 @@ namespace QuanLyThuVien.Data
 		public DbSet<Publisher> Publishers { get; set; }
 		public DbSet<Reader> Members { get; set; }
 		public DbSet<Loan> Loans { get; set; }
-	    public DbSet<QuanLyThuVien.Models.Category> Category { get; set; } = default!;
+	    public DbSet<Category> Categories { get; set; }
 	}
 }
