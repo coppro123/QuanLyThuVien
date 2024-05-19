@@ -4,22 +4,22 @@ using QuanLyThuVien.Data;
 
 namespace QuanLyThuVien.Controllers
 {
-    public class PublishersController : Controller
+    public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public PublishersController(ApplicationDbContext context)
+        public CategoryController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Publishers
+        // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Publishers.ToListAsync());
+            return View(await _context.Categories.ToListAsync());
         }
 
-        // GET: Publishers/Details/5
+        // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -27,14 +27,14 @@ namespace QuanLyThuVien.Controllers
                 return NotFound();
             }
 
-            var publisher = await _context.Publishers
+            var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (publisher == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(publisher);
+            return View(category);
         }
 
         

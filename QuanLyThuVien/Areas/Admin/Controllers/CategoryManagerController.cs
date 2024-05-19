@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuanLyThuVien.Data;
 using QuanLyThuVien.Models;
 
-namespace QuanLyThuVien.Controllers
+namespace QuanLyThuVien.Areas.Admin.Controllers
 {
-    public class CategoriesController : Controller
+    public class CategoryManagerController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CategoriesController(ApplicationDbContext context)
+        public CategoryManagerController(ApplicationDbContext context)
         {
             _context = context;
         }
