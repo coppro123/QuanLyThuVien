@@ -13,7 +13,7 @@ namespace QuanLyThuVien.Data
 
 		public DbSet<Book> Books { get; set; }
 		public DbSet<Publisher> Publishers { get; set; }
-		public DbSet<Reader> Members { get; set; }
+		public DbSet<Reader> Readers { get; set; }
 		public DbSet<Loan> Loans { get; set; }
 	    public DbSet<Category> Categories { get; set; }
 	}

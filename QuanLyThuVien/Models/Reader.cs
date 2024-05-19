@@ -26,7 +26,5 @@ namespace QuanLyThuVien.Models
 		[EmailAddress]
 		public string Email { get; set; }
 
-		[DataType(DataType.Date)]
-		public DateTime MembershipDate { get; set; }
 	}
 }
