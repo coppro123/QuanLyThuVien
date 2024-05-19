@@ -2,21 +2,14 @@
 
 @{
     ViewData["Title"] = "Index";
+
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-area="Admin" asp-action="Create">Create New</a>
 </p>
-
-<form asp-controller="Book" asp-action="Index">
-    <p>
-        Title: <input type="text" name="SearchString" />
-        <input type="submit" value="Filter" />
-    </p>
-</form>
-
 <table class="table">
     <thead>
         <tr>
@@ -38,6 +31,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Quantity)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageUrl)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -51,16 +47,19 @@
                 @Html.DisplayFor(modelItem => item.Author)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Publisher.Name)
+                @Html.DisplayFor(modelItem => item.Publisher.Id)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.YearPublished)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
+                @Html.DisplayFor(modelItem => item.Category.Id)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageUrl)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -71,13 +70,3 @@
 }
     </tbody>
 </table>
-
-<script>
-    document.getElementById('searchButton').addEventListener('click', function () {
-        var searchTerm = document.getElementById('searchInput').value;
-        var searchUrl = '@Url.Action("Search", "ProductManagerController")' + '?searchString=' + encodeURIComponent(searchTerm);
-
-        window.location.href = searchUrl;
-    });
-
-</script>
