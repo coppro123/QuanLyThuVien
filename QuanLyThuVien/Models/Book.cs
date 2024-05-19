@@ -7,11 +7,8 @@ namespace QuanLyThuVien.Models
 	{
 		public int Id { get; set; }
 
-		[Required]
-		[StringLength(255)]
 		public string Title { get; set; }
 
-		[StringLength(100)]
 		public string Author { get; set; }
 
 		public int PublisherId { get; set; }
@@ -25,7 +22,7 @@ namespace QuanLyThuVien.Models
 
 		public int Quantity { get; set; }
 
-		public string ImageUrl { get; set; }
+		public string? ImageUrl { get; set; }
 	}
 }
 

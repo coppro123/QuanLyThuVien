@@ -14,46 +14,45 @@ namespace QuanLyThuVien.Controllers
 {
     public class BookController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly IBookRepository _bookRepository;
-        public BookController(ApplicationDbContext context, IBookRepository bookRepository)
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IPublisherRepository _publisherRepository;
+        public BookController(IBookRepository bookRepository, ICategoryRepository categoryRepository, IPublisherRepository publisherRepository)
         {
-            _context = context;
             _bookRepository = bookRepository;
+            _categoryRepository = categoryRepository;
+            _publisherRepository = publisherRepository;
         }
 
         // GET: Book
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var applicationDbContext = _context.Books.Include(b => b.Category).Include(b => b.Publisher);
-            return View(await applicationDbContext.ToListAsync());
+            var products = _bookRepository.GetAll();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(s => s.Title.Contains(searchString));
+            }
+
+            return View(await products.ToListAsync());
         }
 
         // GET: Book/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var book = await _context.Books
-                .Include(b => b.Category)
-                .Include(b => b.Publisher)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var book = await _bookRepository.GetByIdAsync(id);
             if (book == null)
             {
                 return NotFound();
             }
-
             return View(book);
         }
 
         // GET: Book/Create
         public async Task<IActionResult> Create()
         {
-            var categories = await _context.Categories.ToListAsync();
-            var publishers = await _context.Publishers.ToListAsync();
+            var categories = await _categoryRepository.GetAllAsync();
+            var publishers = await _publisherRepository.GetAllAsync();
 
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
             ViewBag.Publishers = new SelectList(publishers, "Id", "Name");
@@ -64,7 +63,7 @@ namespace QuanLyThuVien.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Add(Book book, IFormFile
+        public async Task<IActionResult> Create(Book book, IFormFile
         imageUrl)
         {
             if (ModelState.IsValid)
@@ -74,19 +73,17 @@ namespace QuanLyThuVien.Controllers
                     // Lưu hình ảnh đại diện tham khảo bài 02 hàm SaveImage
                     book.ImageUrl = await SaveImage(imageUrl);
                 }
-                _context.Add(book);
-                await _context.SaveChangesAsync();
+                _bookRepository.AddAsync(book);
                 return RedirectToAction(nameof(Index));
             }
 
             // Nếu ModelState không hợp lệ, hiển thị form với dữ liệu đã nhập
-            var categories = await _context.Categories.ToListAsync();
-            var publishers = await _context.Publishers.ToListAsync();
+            var categories = await _categoryRepository.GetAllAsync();
+            var publishers = await _publisherRepository.GetAllAsync();
 
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
             ViewBag.Publishers = new SelectList(publishers, "Id", "Name");
-
-            return View(book);
+            return View();
         }
 
         private async Task<string> SaveImage(IFormFile image)
@@ -100,98 +97,81 @@ namespace QuanLyThuVien.Controllers
             return "/images/" + image.FileName; // Trả về đường dẫn tương đối
         }
         // GET: Book/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
+            var product = await _bookRepository.GetByIdAsync(id);
+            if (product == null)
             {
                 return NotFound();
             }
+            var categories = await _categoryRepository.GetAllAsync();
+            var publishers = await _publisherRepository.GetAllAsync();
 
-            var book = await _context.Books.FindAsync(id);
-            if (book == null)
-            {
-                return NotFound();
-            }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", book.CategoryId);
-            ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name", book.PublisherId);
-            return View(book);
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+            ViewBag.Publishers = new SelectList(publishers, "Id", "Name");
+            
+            return View(product);
         }
-
-        // POST: Book/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // Xử lý cập nhật sản phẩm
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author,PublisherId,YearPublished,CategoryId,Quantity")] Book book)
+        public async Task<IActionResult> Edit(int id, Book product,
+        IFormFile imageUrl)
         {
-            if (id != book.Id)
+            ModelState.Remove("ImageUrl"); // Loại bỏ xác thực ModelState cho
+
+            if (id != product.Id)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
-                try
+                var existingProduct = await
+                _bookRepository.GetByIdAsync(id); // Giả định có phương thức GetByIdAsync
+
+                if (imageUrl == null)
                 {
-                    _context.Update(book);
-                    await _context.SaveChangesAsync();
+                    product.ImageUrl = existingProduct.ImageUrl;
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!BookExists(book.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    // Lưu hình ảnh mới
+                    product.ImageUrl = await SaveImage(imageUrl);
                 }
+                // Cập nhật các thông tin khác của sản phẩm
+
+                existingProduct.Title = product.Title;
+                existingProduct.Author = product.Author;
+                existingProduct.PublisherId = product.PublisherId;
+                existingProduct.CategoryId = product.CategoryId;
+                existingProduct.YearPublished = product.YearPublished;
+                existingProduct.ImageUrl = product.ImageUrl;
+                existingProduct.Quantity = product.Quantity;
+
+                await _bookRepository.UpdateAsync(existingProduct);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", book.CategoryId);
-            ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name", book.PublisherId);
-            return View(book);
+            var categories = await _categoryRepository.GetAllAsync();
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+
+
+            return View(product);
         }
 
-        // GET: Book/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
+            var product = await _bookRepository.GetByIdAsync(id);
+            if (product == null)
             {
                 return NotFound();
             }
-
-            var book = await _context.Books
-                .Include(b => b.Category)
-                .Include(b => b.Publisher)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (book == null)
-            {
-                return NotFound();
-            }
-
-            return View(book);
+            return View(product);
         }
-
-        // POST: Book/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        // Xử lý xóa sản phẩm
+        [HttpPost, ActionName("DeleteConfirmed")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var book = await _context.Books.FindAsync(id);
-            if (book != null)
-            {
-                _context.Books.Remove(book);
-            }
-
-            await _context.SaveChangesAsync();
+            await _bookRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool BookExists(int id)
-        {
-            return _context.Books.Any(e => e.Id == id);
         }
     }
 }

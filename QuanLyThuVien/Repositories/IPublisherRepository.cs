@@ -1,6 +1,15 @@
-﻿namespace QuanLyThuVien.Repositories
+﻿using QuanLyThuVien.Models;
+
+namespace QuanLyThuVien.Repositories
 {
-    public class IPublisherRepository
+    public interface IPublisherRepository
     {
+        Task<IEnumerable<Publisher>> GetAllAsync();
+        Task<Publisher> GetByIdAsync(int id);
+        Task AddAsync(Publisher publisher);
+        Task UpdateAsync(Publisher publisher);
+        Task DeleteAsync(int id);
+
+        IQueryable<Publisher> GetAll();
     }
 }
