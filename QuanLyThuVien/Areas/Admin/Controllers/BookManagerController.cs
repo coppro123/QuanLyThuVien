@@ -70,7 +70,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
 					// Lưu hình ảnh đại diện tham khảo bài 02 hàm SaveImage
 					book.ImageUrl = await SaveImage(imageUrl);
 				}
-				_bookRepository.AddAsync(book);
+				await _bookRepository.AddAsync(book);
 				return RedirectToAction(nameof(Index));
 			}
 
