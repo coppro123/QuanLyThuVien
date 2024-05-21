@@ -2,60 +2,39 @@
 {
     var top10Books = ViewBag.Top10Books;
     <h2>Top 10 Books</h2>
-    <div id="piechart" style="width: 45%; height: 500px; display: inline-block;"></div>
-    <div id="columnchart" style="width: 45%; height: 500px; display: inline-block;"></div>
-
+    
+   
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load('current', { 'packages': ['corechart'] });
         google.charts.setOnLoadCallback(drawChart);
 
         function drawChart() {
-            var pieData = new google.visualization.DataTable();
-            pieData.addColumn('string', 'Title');
-            pieData.addColumn('number', 'SoLuongMuon');
-            pieData.addRows([
-        @foreach (var book in top10Books)
-        {
-            <text>['@book.Title', @book.SoLuongMuon], </text>
-        }
-                    ]);
-
+            var pieData = new google.visualization.arrayToDataTable([
+            ['Tên sách', 'Số lượng mượn'],
+                @foreach (var book in top10Books)
+                {
+            <text>['@Html.Raw(@book.Title)', @book.SoLuongMuon], </text>
+                }
+            
+            ]);
+            
             var pieOptions = {
                 title: 'Top 10 Books (Pie Chart)',
                 pieHole: 0.4,
+                is3D: true
             };
 
             var pieChart = new google.visualization.PieChart(document.getElementById('piechart'));
             pieChart.draw(pieData, pieOptions);
 
-            var columnData = new google.visualization.DataTable();
-            columnData.addColumn('string', 'Title');
-            columnData.addColumn('number', 'SoLuongMuon');
-            columnData.addRows([
-        @foreach (var book in top10Books)
-        {
-            <text>['@book.Title', @book.SoLuongMuon], </text>
-        }
-                    ]);
-
-            var columnOptions = {
-                title: 'Top 10 Books (Column Chart)',
-                legend: { position: 'none' },
-            };
-
-            var columnChart = new google.visualization.ColumnChart(document.getElementById('columnchart'));
-            columnChart.draw(columnData, columnOptions);
+            
         }
     </script>
+
+    <div id="piechart" style="width: 45%; height: 500px; display: inline-block;"></div>
 }
 else
 {
     <p>No data available.</p>
 }
-
-<style>
-    body, table, th, td {
-        font-family: Arial, sans-serif;
-    }
-</style>

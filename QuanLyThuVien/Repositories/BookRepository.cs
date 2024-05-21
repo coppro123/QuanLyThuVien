@@ -13,10 +13,10 @@ namespace QuanLyThuVien.Repositories
         }
         public async Task<IEnumerable<Book>> GetAllAsync()
         {
-            // return await _context.Products.ToListAsync();
             return await _context.Books
             .Include(p => p.Category) 
             .Include(p => p.Publisher)
+            .OrderByDescending(p => p.Id)
             .ToListAsync();
         }
         public async Task<Book> GetByIdAsync(int id)
@@ -49,7 +49,8 @@ namespace QuanLyThuVien.Repositories
         {
             return _context.Books
                 .Include(p => p.Category)
-                .Include(p => p.Publisher);
+                .Include(p => p.Publisher)
+                .OrderByDescending(p => p.Id);
         }
 
         public async Task<IEnumerable<Book>> GetByCategory(int id)

@@ -38,6 +38,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="row row-cols-1 row-cols-md-5 g-4">
+
 			@foreach (var item in Model)
 			{
 				<div class="col">
@@ -47,7 +48,7 @@
 						</a>
 						<div class="card-body">
 							<a class="nav-link p-0" asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
-								<h5 class="card-title">@item.Title</h5>
+								<h5 class="card-title">@Truncate(item.Title, 18)</h5> <!-- Limiting title to 20 characters -->
 							</a>
 							<p class="card-text">Tác giả: @item.Author</p>
 							<p class="card-text">Thể loại: @item.Category.Name</p>
@@ -56,6 +57,19 @@
 					</div>
 				</div>
 			}
+
 		</div>
 	</div>
 </div>
+
+<script>
+	@functions {
+		public string Truncate(string value, int maxLength)
+		{
+			if (string.IsNullOrEmpty(value))
+				return value;
+
+			return value.Length <= maxLength ? value : value.Substring(0, maxLength) + "...";
+		}
+ }
+</script>

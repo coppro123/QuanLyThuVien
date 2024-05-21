@@ -37,18 +37,6 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
 
         public ActionResult Top10Books()
         {
-            var top10Books = (from loan in  _context.Loans
-                              join book in  _context.Books on loan.BookId equals book.Id
-                              group book by book.Title into bookGroup
-                              orderby bookGroup.Count() descending
-                              select new
-                              {
-                                  Title = bookGroup.Key,
-                                  SoLuongMuon = bookGroup.Count()
-                              }).Take(10).ToList();
-
-            ViewBag.Top10Books = top10Books;
-
             return View();
         }
     }

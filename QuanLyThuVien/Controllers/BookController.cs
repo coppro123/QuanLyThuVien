@@ -20,18 +20,21 @@ namespace QuanLyThuVien.Controllers
 
 		// GET: Book
 		public async Task<IActionResult> Index(string searchString)
-        {
-            var products = _bookRepository.GetAll();
-            var categories = _categoryRepository.GetAll();
+		{
+			var products = _bookRepository.GetAll();
+			var categories = _categoryRepository.GetAll();
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                products = products.Where(s => s.Title.Contains(searchString));
-            }
+			if (!String.IsNullOrEmpty(searchString))
+			{
+				products = products.Where(s => s.Title.Contains(searchString));
+			}
 
-            ViewBag.Categories = new SelectList(categories, "Id", "Name");
-            return View(await products.ToListAsync());
-        }
+			var filteredProducts = await products.ToListAsync(); // Chờ đợi tìm kiếm được áp dụng trước khi lấy dữ liệu từ cơ sở dữ liệu
+
+			ViewBag.Categories = new SelectList(categories, "Id", "Name");
+			return View(filteredProducts);
+		}
+
 
 		public async Task<IActionResult> FilterByCategory(int id)
 		{
