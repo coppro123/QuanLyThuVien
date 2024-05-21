@@ -51,5 +51,18 @@ namespace QuanLyThuVien.Repositories
                 .Include(p => p.Category)
                 .Include(p => p.Publisher);
         }
+
+        public async Task<IEnumerable<Book>> GetByCategory(int id)
+        {
+            // Retrieve books by category ID along with associated category and publisher
+            var books = await _context.Books
+                .Include(p => p.Category)
+                .Include(p => p.Publisher)
+                .Where(p => p.CategoryId == id)
+                .ToListAsync();
+
+            return books;
+        }
+
     }
 }

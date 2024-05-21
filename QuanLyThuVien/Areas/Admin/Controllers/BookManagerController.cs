@@ -111,8 +111,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
 		}
 		// Xử lý cập nhật sản phẩm
 		[HttpPost]
-		public async Task<IActionResult> Edit(int id, Book product,
-		IFormFile imageUrl)
+		public async Task<IActionResult> Edit(int id, Book product, IFormFile imageUrl)
 		{
 			ModelState.Remove("ImageUrl"); // Loại bỏ xác thực ModelState cho
 

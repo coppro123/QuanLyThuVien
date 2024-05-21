@@ -11,5 +11,7 @@ namespace QuanLyThuVien.Repositories
         Task DeleteAsync(int id);
 
         IQueryable<Book> GetAll();
+
+        Task<IEnumerable<Book>> GetByCategory(int id);
     }
 }

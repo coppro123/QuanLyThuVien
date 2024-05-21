@@ -3,19 +3,26 @@
 @{
 	ViewData["Title"] = "Index";
 	var categories = ViewBag.Categories as SelectList;
+	var categoryId = Context.Request.Query["id"].ToString();
+	var selectedCategory = categories.FirstOrDefault(c => c.Value == categoryId);
 }
+
 
 <div class="row mb-3">
 	<div class="col-md-4">
 		<form id="categoryForm" method="get" asp-action="FilterByCategory" asp-controller="Book">
 			<div class="input-group">
 				<select class="form-select" name="id" id="categorySelect">
-					<option value="" disabled selected>Chọn thể loại</option>
-					<option value="0">All</option>
+
+					<option value="@selectedCategory">@selectedCategory.Text</option>
 					@foreach (SelectListItem category in categories)
 					{
-						<option value="@category.Value">@category.Text</option>
+						if (category.Value != selectedCategory.Value)
+						{
+							<option value="@category.Value">@category.Text</option>
+						}
 					}
+
 				</select>
 			</div>
 		</form>
@@ -53,3 +60,4 @@
 		</div>
 	</div>
 </div>
+
