@@ -1,8 +1,7 @@
 ﻿@if (ViewBag.Top10Books != null)
 {
     var top10Books = ViewBag.Top10Books;
-    <h2>Top 10 Sách mượn nhiều nhât</h2>
-
+    <h2>Top 10 Books</h2>
     <div id="piechart" style="width: 45%; height: 500px; display: inline-block;"></div>
     <div id="columnchart" style="width: 45%; height: 500px; display: inline-block;"></div>
 
@@ -20,12 +19,11 @@
         {
             <text>['@book.Title', @book.SoLuongMuon], </text>
         }
-                            ]);
+                    ]);
 
             var pieOptions = {
                 title: 'Top 10 Books (Pie Chart)',
                 pieHole: 0.4,
-                fontName: 'Roboto'
             };
 
             var pieChart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -39,7 +37,7 @@
         {
             <text>['@book.Title', @book.SoLuongMuon], </text>
         }
-                            ]);
+                    ]);
 
             var columnOptions = {
                 title: 'Top 10 Books (Column Chart)',
@@ -57,7 +55,7 @@ else
 }
 
 <style>
-    body, table, th, td, #piechart {
-        fontName: 'Arial'
+    body, table, th, td {
+        font-family: Arial, sans-serif;
     }
 </style>

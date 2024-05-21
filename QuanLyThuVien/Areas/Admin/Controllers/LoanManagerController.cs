@@ -62,10 +62,22 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Loan loan)
         {
+            var readers = await _readerRepository.GetAllAsync();
+            var books = await _bookRepository.GetAllAsync();
+
             if (ModelState.IsValid)
             {
                 loan.LoanDate = DateTime.Now;
                 loan.Status = "Đang mượn";
+
+                // Kiểm tra nếu ngày trả nhỏ hơn ngày mượn
+                if (loan.DueDate < loan.LoanDate)
+                {
+                    ModelState.AddModelError("", "Ngày trả phải lớn hơn ngày mượn");
+                    ViewBag.Readers = new SelectList(readers, "Id", "FullName");
+                    ViewBag.Books = new SelectList(books, "Id", "Title");
+                    return View();
+                }
 
                 // Lấy sách được mượn từ cơ sở dữ liệu
                 var book = await _bookRepository.GetByIdAsync(loan.BookId);
@@ -77,8 +89,10 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
 
                 if (book.Quantity == 0)
                 {
-                    // Trả về BadRequest nếu không còn sách trong kho
-                    return ("Đã hết sách trong kho");
+                    ModelState.AddModelError("", "Đã hết sách trong kho");
+                    ViewBag.Readers = new SelectList(readers, "Id", "FullName");
+                    ViewBag.Books = new SelectList(books, "Id", "Title");
+                    return View();
                 }
                 // Giảm số lượng sách đi 1
                 book.Quantity--;
@@ -93,13 +107,16 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             }
 
             // Nếu ModelState không hợp lệ, hiển thị form với dữ liệu đã nhập
-            var readers = await _readerRepository.GetAllAsync();
-            var books = await _bookRepository.GetAllAsync();
-
             ViewBag.Readers = new SelectList(readers, "Id", "FullName");
             ViewBag.Books = new SelectList(books, "Id", "Title");
             return View();
         }
+
+
+        // Nếu ModelState không hợp lệ, hiển thị form với dữ liệu đã nhập
+
+
+        
 
 
 
@@ -172,7 +189,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
 
             // Tăng số lượng sách lên 1
             var book = await _bookRepository.GetByIdAsync(loan.BookId);
-            if (book != null)
+            if (book != null && loan.ReturnDate == null)
             {
                 book.Quantity++;
                 await _bookRepository.UpdateAsync(book);
@@ -183,5 +200,33 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> ReturnBook(int id)
+        {
+            var loan = await _loanRepository.GetByIdAsync(id);
+            if (loan == null)
+            {
+                return NotFound();
+            }
+
+            // Lấy ngày hiện tại
+            loan.ReturnDate = DateTime.Now;
+            loan.Status = "Đã trả sách";
+
+            // Cập nhật thông tin mượn sách
+            await _loanRepository.UpdateAsync(loan);
+
+            // Lấy thông tin sách được mượn
+            var book = await _bookRepository.GetByIdAsync(loan.BookId);
+            if (book != null)
+            {
+                // Tăng số lượng sách lên 1
+                book.Quantity++;
+                await _bookRepository.UpdateAsync(book);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
