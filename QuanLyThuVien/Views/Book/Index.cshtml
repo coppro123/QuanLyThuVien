@@ -11,19 +11,9 @@
 			<div class="input-group">
 
 				<select class="form-select" id="categorySelect">
-					
-
-					@if(ViewBag.SelectedCategory == null)
-					{
-						<option value="" disabled selected>Chọn thể loại</option>					
-
-					}else
-					{
-						<option value="" disabled>Chọn thể loại</option>
-						<option value="ViewBag.SelectedCategory.Value" selected>ViewBag.SelectedCategory.Text</option>
-					}
+					<option value="" disabled selected>Chọn thể loại</option>
 					<option value="-1">All</option>
-									
+
 					@foreach (SelectListItem category in categories)
 					{
 						<option value="@category.Value">@category.Text</option>
@@ -84,22 +74,43 @@
 </script>
 
 <script>
-    document.getElementById('searchButton').addEventListener('click', function () {
-        var searchTerm = document.getElementById('searchInput').value;
-        var searchUrl = '@Url.Action("Search", "ProductManagerController")' + '?searchString=' + encodeURIComponent(searchTerm);
+	document.getElementById('searchButton').addEventListener('click', function () {
+		var searchTerm = document.getElementById('searchInput').value;
+		var searchUrl = '@Url.Action("Search", "ProductManagerController")' + '?searchString=' + encodeURIComponent(searchTerm);
 
-        window.location.href = searchUrl;
-    });
+		window.location.href = searchUrl;
+	});
 
 </script>
+
+
 
 <script>
 	document.getElementById('categorySelect').addEventListener('change', function () {
 		var selectedValue = this.value;
+
+		localStorage.setItem('selectedCategory', selectedValue);
+
+		console.log("Giá trị 'selectedCategory' trong localStorage là: ", localStorage.selectedCategory);
+
 		var form = document.getElementById('categoryForm');
 		form.action = '/Book/findbycategory/' + selectedValue;
 		form.submit();
 	});
+
+	window.onload = function () {
+		// Lấy giá trị 'selectedCategory' từ localStorage
+		var selectedValue = localStorage.selectedCategory;
+
+		// Kiểm tra nếu giá trị tồn tại
+		if (selectedValue) {
+			// Thiết lập giá trị cho dropdown
+			document.getElementById('categorySelect').value = selectedValue;
+		}
+	};
+	
+
 </script>
+
 
 
