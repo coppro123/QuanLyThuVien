@@ -59,12 +59,4 @@
 </body>
 </html>
 
-<script>
-    document.getElementById('searchButton').addEventListener('click', function () {
-        var searchTerm = document.getElementById('searchInput').value;
-        var searchUrl = '@Url.Action("Search", "ProductManagerController")' + '?searchString=' + encodeURIComponent(searchTerm);
 
-        window.location.href = searchUrl;
-    });
-
-</script>

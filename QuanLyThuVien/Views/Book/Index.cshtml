@@ -7,18 +7,33 @@
 
 <div class="row mb-3 justify-content-between">
 	<div class="col-md-3">
-		<form id="categoryForm" method="get" asp-action="FilterByCategory" asp-controller="Book">
+		<form id="categoryForm" method="get" action="">
 			<div class="input-group">
-				<select class="form-select" name="id" id="categorySelect">
-					<option value="" disabled selected>Chọn thể loại</option>
+
+				<select class="form-select" id="categorySelect">
+					
+
+					@if(ViewBag.SelectedCategory == null)
+					{
+						<option value="" disabled selected>Chọn thể loại</option>					
+
+					}else
+					{
+						<option value="" disabled>Chọn thể loại</option>
+						<option value="ViewBag.SelectedCategory.Value" selected>ViewBag.SelectedCategory.Text</option>
+					}
+					<option value="-1">All</option>
+									
 					@foreach (SelectListItem category in categories)
 					{
 						<option value="@category.Value">@category.Text</option>
 					}
 				</select>
+
 			</div>
 		</form>
 	</div>
+
 
 	<div class="col-md-3">
 		<form class="d-flex" asp-controller="Book" asp-action="Index">
@@ -26,14 +41,8 @@
 			<button class="btn btn-outline-success" type="submit">Search</button>
 		</form>
 	</div>
+
 </div>
-
-<script>
-	document.getElementById('categorySelect').addEventListener('change', function () {
-		document.getElementById('categoryForm').submit();
-	});
-</script>
-
 
 <div class="row">
 	<div class="col-md-12">
@@ -73,3 +82,24 @@
 		}
  }
 </script>
+
+<script>
+    document.getElementById('searchButton').addEventListener('click', function () {
+        var searchTerm = document.getElementById('searchInput').value;
+        var searchUrl = '@Url.Action("Search", "ProductManagerController")' + '?searchString=' + encodeURIComponent(searchTerm);
+
+        window.location.href = searchUrl;
+    });
+
+</script>
+
+<script>
+	document.getElementById('categorySelect').addEventListener('change', function () {
+		var selectedValue = this.value;
+		var form = document.getElementById('categoryForm');
+		form.action = '/Book/findbycategory/' + selectedValue;
+		form.submit();
+	});
+</script>
+
+

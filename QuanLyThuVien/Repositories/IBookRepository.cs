@@ -13,5 +13,7 @@ namespace QuanLyThuVien.Repositories
         IQueryable<Book> GetAll();
 
         Task<IEnumerable<Book>> GetByCategory(int id);
+
+        Task<IEnumerable<Book>> GetBooksByName(string name);
     }
 }

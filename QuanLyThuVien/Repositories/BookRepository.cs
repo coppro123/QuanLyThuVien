@@ -19,6 +19,18 @@ namespace QuanLyThuVien.Repositories
             .OrderByDescending(p => p.Id)
             .ToListAsync();
         }
+
+        public async Task<IEnumerable<Book>> GetBooksByName(string name)
+        {
+            return await _context.Books
+                .Include(p => p.Category)
+                .Include(p => p.Publisher)
+                .Where(p => p.Title.Contains(name, StringComparison.OrdinalIgnoreCase))
+                .OrderByDescending(p => p.Id)
+                .ToListAsync();
+        }
+
+
         public async Task<Book> GetByIdAsync(int id)
         {
             // return await _context.Products.FindAsync(id);
