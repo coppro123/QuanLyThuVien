@@ -13,8 +13,8 @@
 		<form id="categoryForm" method="get" asp-action="FilterByCategory" asp-controller="Book">
 			<div class="input-group">
 				<select class="form-select" name="id" id="categorySelect">
-
-					<option value="@selectedCategory">@selectedCategory.Text</option>
+					<option value="-1">All</option>
+					<option value="@selectedCategory" selected>@selectedCategory.Text</option>
 					@foreach (SelectListItem category in categories)
 					{
 						if (category.Value != selectedCategory.Value)

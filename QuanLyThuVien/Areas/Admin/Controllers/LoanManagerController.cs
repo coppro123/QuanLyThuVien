@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLyThuVien.Models;
@@ -6,7 +7,9 @@ using QuanLyThuVien.Repositories;
 
 namespace QuanLyThuVien.Areas.Admin.Controllers
 {
-    public class LoanManagerController : Controller
+	[Area("Admin")]
+	[Authorize(Roles = SD.Role_Admin)]
+	public class LoanManagerController : Controller
     {
         private readonly IBookRepository _bookRepository;
         private readonly IReaderRepository _readerRepository;
@@ -21,7 +24,13 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         // GET: Book
         public async Task<IActionResult> Index()
         {
-            var loans = _loanRepository.GetAll();          
+			var books = await _bookRepository.GetAllAsync();
+			var readers = await _readerRepository.GetAllAsync();
+
+			ViewBag.Books = new SelectList(books, "Id", "Title");
+			ViewBag.Readers = new SelectList(readers, "Id", "FullName");
+
+			var loans = _loanRepository.GetAll();          
             return View(loans);
         }
 
@@ -43,7 +52,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             var books = await _bookRepository.GetAllAsync();
 
             ViewBag.Readers = new SelectList(readers, "Id", "FullName");
-            ViewBag.Books = new SelectList(books, "Id", "Name");
+            ViewBag.Books = new SelectList(books, "Id", "Title");
             return View();
         }
 
@@ -55,7 +64,31 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                loan.LoanDate = DateTime.Now;
+                loan.Status = "Đang mượn";
+
+                // Lấy sách được mượn từ cơ sở dữ liệu
+                var book = await _bookRepository.GetByIdAsync(loan.BookId);
+                if (book == null)
+                {
+                    // Xử lý khi không tìm thấy sách
+                    return NotFound();
+                }
+
+                if (book.Quantity == 0)
+                {
+                    // Trả về BadRequest nếu không còn sách trong kho
+                    return ("Đã hết sách trong kho");
+                }
+                // Giảm số lượng sách đi 1
+                book.Quantity--;
+
+                // Cập nhật sách trong cơ sở dữ liệu
+                await _bookRepository.UpdateAsync(book);
+
+                // Thêm mục mượn vào cơ sở dữ liệu
                 await _loanRepository.AddAsync(loan);
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -63,12 +96,13 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             var readers = await _readerRepository.GetAllAsync();
             var books = await _bookRepository.GetAllAsync();
 
-            ViewBag.Categories = new SelectList(readers, "Id", "FullName");
-            ViewBag.Publishers = new SelectList(books, "Id", "Name");
+            ViewBag.Readers = new SelectList(readers, "Id", "FullName");
+            ViewBag.Books = new SelectList(books, "Id", "Title");
             return View();
         }
 
-       
+
+
         // GET: Book/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
@@ -118,7 +152,7 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var loan = await _bookRepository.GetByIdAsync(id);
+            var loan = await _loanRepository.GetByIdAsync(id);
             if (loan == null)
             {
                 return NotFound();
@@ -129,7 +163,24 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
         [HttpPost, ActionName("DeleteConfirmed")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _bookRepository.DeleteAsync(id);
+            // Lấy thông tin mượn để biết sách nào đã được mượn
+            var loan = await _loanRepository.GetByIdAsync(id);
+            if (loan == null)
+            {
+                return NotFound();
+            }
+
+            // Tăng số lượng sách lên 1
+            var book = await _bookRepository.GetByIdAsync(loan.BookId);
+            if (book != null)
+            {
+                book.Quantity++;
+                await _bookRepository.UpdateAsync(book);
+            }
+
+            // Xóa mượn khỏi cơ sở dữ liệu
+            await _loanRepository.DeleteAsync(id);
+
             return RedirectToAction(nameof(Index));
         }
     }

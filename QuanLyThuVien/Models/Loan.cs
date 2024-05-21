@@ -9,11 +9,11 @@ namespace QuanLyThuVien.Models
 
 		public int BookId { get; set; }
 
-		public Book Book { get; set; }
+		public Book? Book { get; set; }
 
 		public int ReaderId { get; set; }
 
-		public Reader Reader { get; set; }	
+		public Reader? Reader { get; set; }	
 
 		[DataType(DataType.Date)]
 		public DateTime LoanDate { get; set; }
@@ -25,6 +25,6 @@ namespace QuanLyThuVien.Models
 		public DateTime? ReturnDate { get; set; }
 
 		[StringLength(50)]
-		public string Status { get; set; }
+		public string? Status { get; set; }
 	}
 }

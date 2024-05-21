@@ -11,7 +11,6 @@
 			<div class="input-group">
 				<select class="form-select" name="id" id="categorySelect">
 					<option value="" disabled selected>Chọn thể loại</option>
-					<option value="0">All</option>
 					@foreach (SelectListItem category in categories)
 					{
 						<option value="@category.Value">@category.Text</option>

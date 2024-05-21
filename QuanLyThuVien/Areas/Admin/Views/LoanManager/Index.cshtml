@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Quản lý mượn/trả sách</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,22 +13,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Book)
+                Tên sách
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Reader)
+                Người mượn
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LoanDate)
+                Ngày mượn
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DueDate)
+                Ngày trả dự kiến
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReturnDate)
+                Ngày trả thực tế
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                Trạng thái
             </th>
             <th></th>
         </tr>
@@ -37,10 +37,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Book.Id)
+                @Html.DisplayFor(modelItem => item.Book.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Reader.Id)
+                @Html.DisplayFor(modelItem => item.Reader.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LoanDate)

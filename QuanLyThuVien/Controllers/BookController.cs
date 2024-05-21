@@ -18,8 +18,8 @@ namespace QuanLyThuVien.Controllers
             _publisherRepository = publisherRepository;
         }
 
-        // GET: Book
-        public async Task<IActionResult> Index(string searchString)
+		// GET: Book
+		public async Task<IActionResult> Index(string searchString)
         {
             var products = _bookRepository.GetAll();
             var categories = _categoryRepository.GetAll();
@@ -33,25 +33,29 @@ namespace QuanLyThuVien.Controllers
             return View(await products.ToListAsync());
         }
 
-        public async Task<IActionResult> FilterByCategory(int id)
-        {
-            IEnumerable<Book> products;
+		public async Task<IActionResult> FilterByCategory(int id)
+		{
 			var categories = _categoryRepository.GetAll();
-			if (id == 0)
-            {
-                products = await _bookRepository.GetAll().ToListAsync();
-            }
-            else
-            {
-                products = await _bookRepository.GetByCategory(id);
-            }
-			ViewBag.Categories = new SelectList(categories, "Id", "Name");
+			IEnumerable<Book> products;
+			
+			if (id == -1)
+			{
+				return RedirectToAction("Index"); // Chuyển hướng đến action Index
+			}
+			else
+			{
+				products = await _bookRepository.GetByCategory(id);
+			}
+
+			ViewBag.Categories = new SelectList(categories, "Id", "Name"); // Sử dụng danh sách đã được lấy từ Index
+
 			return View(products);
-        }
+		}
 
 
-        // GET: Book/Details/5
-        public async Task<IActionResult> Details(int id)
+
+		// GET: Book/Details/5
+		public async Task<IActionResult> Details(int id)
         {
             var book = await _bookRepository.GetByIdAsync(id);
             if (book == null)

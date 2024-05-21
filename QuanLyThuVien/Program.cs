@@ -23,6 +23,7 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
 builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
+builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 
 var app = builder.Build();
 
@@ -49,7 +50,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
       name: "areas",
-      pattern: "{area:exists}/{controller=Book}/{action=Index}/{id?}"
+      pattern: "{area:exists}/{controller=BookManager}/{action=Index}/{id?}"
     );
 });
 
