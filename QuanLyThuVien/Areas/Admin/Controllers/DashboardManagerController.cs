@@ -32,12 +32,21 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                               }).Take(10).ToList();
 
             ViewBag.Top10Books = top10Books;
+
+            var topCategories = from loan in _context.Loans
+                                join book in _context.Books on loan.BookId equals book.Id
+                                join category in _context.Categories on book.CategoryId equals category.Id
+                                group category by category.Name into categoryGroup
+                                orderby categoryGroup.Count() descending
+                                select new
+                                {
+                                    Category = categoryGroup.Key,
+                                    LoanCount = categoryGroup.Count()
+                                };
+            ViewBag.TopCategories = topCategories;
+
             return View();
         }
 
-        public ActionResult Top10Books()
-        {
-            return View();
-        }
     }
 }

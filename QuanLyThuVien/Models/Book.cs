@@ -11,6 +11,8 @@ namespace QuanLyThuVien.Models
 
 		public string Author { get; set; }
 
+		public string? Description { get; set; }
+
 		public int PublisherId { get; set; }
 		public Publisher? Publisher { get; set; }
 

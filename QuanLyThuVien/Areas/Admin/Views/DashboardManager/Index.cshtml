@@ -1,7 +1,7 @@
 ﻿@if (ViewBag.Top10Books != null)
 {
     var top10Books = ViewBag.Top10Books;
-    <h2>Top 10 Books</h2>
+   
 
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -20,7 +20,7 @@
                     ]);
 
             var pieOptions = {
-                title: 'Top 10 Books (Pie Chart)',
+                title: 'Top 10 Sách Được Mượn nhiều nhất',
                 pieHole: 0.4,
                 fontName: 'Arial',
                 is3D: true
@@ -34,6 +34,48 @@
     </script>
 
     <div id="piechart" style="width: 45%; height: 500px; display: inline-block;"></div>
+}
+else
+{
+    <p>No data available.</p>
+}
+
+@if (ViewBag.TopCategories != null)
+{
+    var topCategories = ViewBag.TopCategories;
+
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var pieData = new google.visualization.arrayToDataTable([
+                ['Thể Loại', 'Số lượng phiếu mượn'],
+        @foreach (var cate in topCategories)
+        {
+            <text>['@Html.Raw(@cate.Category)', @cate.LoanCount], </text>
+        }
+
+                            ]);
+
+            var pieOptions = {
+                title: 'Top Thể Loại Được Yêu Thích Nhất',
+                pieHole: 0.4,
+                fontName: 'Arial',
+                is3D: true
+            };
+
+            var pieChart = new google.visualization.PieChart(document.getElementById('piechart2'));
+            pieChart.draw(pieData, pieOptions);
+
+
+        }
+    </script>
+
+    <div id="piechart2" style="width: 45%; height: 500px; display: inline-block;"></div>
 }
 else
 {

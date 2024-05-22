@@ -26,7 +26,7 @@
 				Năm XB
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Category)
+				Thể Loại
 			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.Quantity)
@@ -54,7 +54,7 @@
 					@Html.DisplayFor(modelItem => item.YearPublished)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Category.Id)
+					@Html.DisplayFor(modelItem => item.Category.Name)
 				</td>
 
 				<td style="color: @(item.Quantity == 0 ? "red" : "green")">
