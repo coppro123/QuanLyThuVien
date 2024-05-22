@@ -142,8 +142,9 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
 				existingProduct.YearPublished = product.YearPublished;
 				existingProduct.ImageUrl = product.ImageUrl;
 				existingProduct.Quantity = product.Quantity;
+				existingProduct.Description = product.Description;
 
-				await _bookRepository.UpdateAsync(existingProduct);
+                await _bookRepository.UpdateAsync(existingProduct);
 				return RedirectToAction(nameof(Index));
 			}
 			var categories = await _categoryRepository.GetAllAsync();

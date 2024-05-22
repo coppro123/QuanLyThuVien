@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "ChatGPT";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <input type="text" id="queryInput" placeholder="Enter your query" />
+    <button onclick="sendQuery()">Send</button>
+</div>
+
+<div id="responseOutput"></div>
+
+<script>
+    async function sendQuery() {
+        const queryInput = document.getElementById('queryInput').value;
+        if (!queryInput) {
+            alert("Please enter a query.");
+            return;
+        }
+
+        const response = await fetch(`/GPT/UseChatGPT?query=${encodeURIComponent(queryInput)}`);
+        const data = await response.text();
+
+        document.getElementById('responseOutput').innerText = data;
+    }
+</script>
