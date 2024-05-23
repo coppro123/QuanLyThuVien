@@ -5,7 +5,7 @@
 	var categories = ViewBag.Categories as SelectList;
 }
 
-<div class="row mb-3 justify-content-between">
+<div class="row mb-4 justify-content-between">
 	<div class="col-md-3">
 		<form id="categoryForm" method="get" action="">
 			<div class="input-group">
@@ -41,14 +41,16 @@
 			@foreach (var item in Model)
 			{
 				<div class="col">
-					<div class="card">
+					<div class="card" style="padding: 8px;border-radius: 12px">
 						<a asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
 							<img src="@item.ImageUrl" class="card-img-top" alt="@item.Title" />
 						</a>
 						<div class="card-body">
-							<a class="nav-link p-0" asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
-								<h5 class="card-title">@Truncate(item.Title, 18)</h5> <!-- Limiting title to 20 characters -->
-							</a>
+							<div style="height: 56px">
+								<a class="nav-link p-0" asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
+									<h5 style="font-weight: 700" class="card-title">@Truncate(item.Title, 29)</h5> <!-- Limiting title to 20 characters -->
+								</a>
+							</div>
 							<p class="card-text">Tác giả: @item.Author</p>
 							<p class="card-text">Thể loại: @item.Category.Name</p>
 							<p class="card-text">Số lượng còn lại: @item.Quantity</p>

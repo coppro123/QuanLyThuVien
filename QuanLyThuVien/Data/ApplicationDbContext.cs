@@ -16,5 +16,8 @@ namespace QuanLyThuVien.Data
 		public DbSet<Reader> Readers { get; set; }
 		public DbSet<Loan> Loans { get; set; }
 	    public DbSet<Category> Categories { get; set; }
+
+		public DbSet<ListImage> ListImages { get; set; }	
+	    public DbSet <Blog> Blog { get; set; }
 	}
 }

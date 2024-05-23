@@ -45,6 +45,17 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
                                 };
             ViewBag.TopCategories = topCategories;
 
+
+            var  NumberOfBooks = _context.Books.Count();
+
+            ViewBag.NumberOfBooks = NumberOfBooks;
+
+            var NumberOfReaders = _context.Readers.Count();   
+            ViewBag.NumberOfReaders = NumberOfReaders;
+
+            var NumberOfBlogs = _context.Blog.Count();
+            ViewBag.NumberOfBlogs = NumberOfBlogs;
+
             return View();
         }
 

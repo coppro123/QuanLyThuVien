@@ -1,65 +1,113 @@
 ﻿@model IEnumerable<QuanLyThuVien.Models.Loan>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 <h1>Quản lý mượn/trả sách</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+	<a class="btn btn-primary" asp-action="Create">Create New</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                Tên sách
-            </th>
-            <th>
-                Người mượn
-            </th>
-            <th>
-                Ngày mượn
-            </th>
-            <th>
-                Ngày trả dự kiến
-            </th>
-            <th>
-                Ngày trả thực tế
-            </th>
-            <th>
-                Trạng thái
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Book.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reader.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoanDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReturnDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                <a asp-action="ReturnBook" asp-route-id="@item.Id">Trả sách</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+	<thead>
+		<tr>
+			<th>
+				Tên sách
+			</th>
+			<th>
+				Người mượn
+			</th>
+			<th>
+				Ngày mượn
+			</th>
+			<th>
+				Ngày trả dự kiến
+			</th>
+			<th>
+				Ngày trả thực tế
+			</th>
+			<th>
+				Trạng thái
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Book.Title)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Reader.FullName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.LoanDate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.DueDate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ReturnDate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Status)
+				</td>
+				<td>
+					<a asp-action="ReturnBook" asp-route-id="@item.Id">Trả sách</a> |
+					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>
+
+<style>
+	/* General table styles */
+	table {
+		width: 100%; /* Ensures table fills the container */
+		border-collapse: collapse; /* Removes borders between cells */
+		background-color: #f5f5f5; /* Light background color */
+	}
+
+	th, td {
+		padding: 10px 15px; /* Consistent padding for cells */
+		border: 1px solid #ddd; /* Thin border for separation */
+	}
+
+	th {
+		background-color: #e0f2ff; /* Light blue background for headers */
+		font-weight: bold; /* Bold headers for emphasis */
+	}
+
+	/* Specific styles for elements within the table */
+	a {
+		color: #333; /* Darker text color for links */
+		text-decoration: none; /* Remove default underlining for links */
+	}
+
+		a:hover {
+			text-decoration: underline; /* Underline links on hover */
+		}
+
+	td:nth-child(3), /* Loan date */
+	td:nth-child(4), /* Due date */
+	td:nth-child(5) { /* Return date */
+		text-align: center; /* Center dates for readability */
+	}
+
+	td:nth-child(7) { /* Cell for actions */
+		text-align: right; /* Right-align action buttons for better visual hierarchy */
+	}
+
+	/* Optional: Striped rows for visual interest */
+	tr:nth-child(even) {
+		background-color: #fff; /* Lighter background color for even rows */
+	}
+
+	/* Optional: Responsive table for smaller screens */
+
+</style>

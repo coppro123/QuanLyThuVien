@@ -1,97 +1,81 @@
 ﻿@model QuanLyThuVien.Models.Book
 
 @{
-    ViewData["Title"] = "Details";
+	ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
 <div class="mt-4">
-    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+	<a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+	<a class="btn btn-primary" asp-action="Index">Back to List</a>
 </div>
 
 <div class="row book-details">
 
-    <div class="col-md-4 book-img-container">
-        <img class="book-image" src="@Html.DisplayFor(model => model.ImageUrl)" />
-    </div>
+	<div class="col-md-4 book-img-container">
+		<img class="book-image" src="@Html.DisplayFor(model => model.ImageUrl)" />
+	</div>
 
-    <div class="col-md-8 book-info">
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Title)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Title)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Author)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Author)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Publisher)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Publisher.Name)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.YearPublished)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.YearPublished)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Category)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Category.Id)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Quantity)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Quantity)
-            </dd>
-        </dl>
-    </div>
+	<div class="col-md-8 book-info">
+		<dl class="row">
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.Title)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.Title)
+			</dd>
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.Author)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.Author)
+			</dd>
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.Publisher)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.Publisher.Name)
+			</dd>
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.YearPublished)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.YearPublished)
+			</dd>
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.Category)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.Category.Id)
+			</dd>
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.Quantity)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.Quantity)
+			</dd>
+		</dl>
+	</div>
 
-    <div class="col-md-12 description mt-4">
-        @Html.Raw(Model.Description)
-    </div>
+	<div class="col-md-12 description mt-4">
+		<div class="description-wrapper">
+			@Html.Raw(Model.Description)
+		</div>
+	</div>
+
 </div>
 
 <div class="mt-4">
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+	<a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+	<a asp-action="Index">Back to List</a>
 </div>
 
 <style>
-    .book-details {
-        
-        display: flex;
-        flex-wrap: wrap;
-    }
+	.description-wrapper {
+		padding: 10px;
+	}
 
-    .book-image {       
-        max-width: 100%;
-        max-height: 300px;
-    }
-
-    .book-info {
-        border: 2px solid;
-        padding: 10px;
-    }
-
-    .description {
-        border: 2px solid black;
-        padding: 10px;
-    }
-
-    .book-img-container{
-        border: 2px solid;
-        border-right: none;
-    }
+	img {
+		max-width: 100%; /* Chiều rộng tối đa bằng 100% kích thước thẻ cha */
+		max-height: 100%; /* Chiều cao tối đa bằng 100% kích thước thẻ cha */
+	}
 </style>

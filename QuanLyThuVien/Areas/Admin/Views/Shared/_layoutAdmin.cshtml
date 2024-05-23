@@ -74,8 +74,8 @@
 		</div>
 		<div id="layoutSidenav_content">
 			<main>
-				<div class="container-fluid px-4">
-					@RenderBody()
+				<div class="container">					
+						@RenderBody()										
 				</div>
 			</main>
 			<footer class="py-4 bg-light mt-auto">
@@ -106,7 +106,7 @@
 			{ value: 'Email', title: 'Email' },
 		],
 		ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-		height: '1080px',
+		height: '600px',
 	});
 </script>
 
@@ -136,8 +136,9 @@
 		}
 
 	/* Main Content */
-	.container-fluid {
-		padding-top: 20px;
+	.container {
+		padding: 40px;
+		background-color: #f0f0f0;
 	}
 
 	/* Footer */

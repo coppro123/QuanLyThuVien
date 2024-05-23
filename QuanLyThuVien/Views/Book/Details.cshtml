@@ -4,54 +4,82 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>@Model.Title</h1>
 
-<div class="book-details-container">
-    <div class="book-image">
-        <img src="@Model.ImageUrl" alt="@Model.Title" />
-    </div>
-    <div class="book-info">
-        
-        <dl class="row">
-            
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Author)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Author)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Publisher)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Publisher.Name)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.YearPublished)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.YearPublished)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Category)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Category.Name)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Quantity)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Quantity)
-            </dd>
-        </dl>
+<div>
+    <a class="btn btn-primary mb-4" asp-action="Index">Trở về danh sách sản phẩm</a>
+</div>
+
+
+<div class="book-details-wrapper">
+    <div class="book-details-container">
+        <div class="book-image">
+            <img src="@Model.ImageUrl" alt="@Model.Title" />
+        </div>
+        <div class="book-info">
+            <dl class="row">
+                <dt class="col-sm-12 mb-5">
+                    <h1>@Model.Title</h1>
+                </dt>
+
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Author)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Author)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Publisher)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Publisher.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.YearPublished)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.YearPublished)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Category)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Category.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Quantity)
+                </dd>
+            </dl>
+        </div>
     </div>
 </div>
+
 <div>
-    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+    <div class="mt-4 book-description-wrapper">
+        @Html.Raw(Model.Description)
+    </div>
 </div>
 
 <style>
+
+    .book-description-wrapper{
+        background-color: white;
+        border-radius: 10px;
+        padding: 16px;
+    }
+
+    .book-details-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh;
+        background-color: white;
+        border-radius: 10px;
+        
+    }
+
     .book-details-container {
         display: flex;
         align-items: flex-start;
@@ -70,5 +98,4 @@
     .book-info {
         flex: 2;
     }
-
 </style>

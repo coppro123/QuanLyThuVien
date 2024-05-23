@@ -1,67 +1,113 @@
 ﻿@model IEnumerable<QuanLyThuVien.Models.Reader>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
-
 <p>
-    <a asp-action="Create">Create New</a>
+	<a class="btn btn-primary" asp-action="Create">Create New</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-           
-            <th>
-                Tên
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-           
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                <img style="max-width: 70px" src="@Html.DisplayFor(modelItem => item.ImageUrl)" alt="Alternate Text" />
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+	<thead>
+		<tr>
+
+			<th>
+				Tên
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.DateOfBirth)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Address)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.PhoneNumber)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Email)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ImageUrl)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.FullName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.DateOfBirth)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Address)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.PhoneNumber)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Email)
+				</td>
+				<td>
+					<img style="max-width: 70px" src="@Html.DisplayFor(modelItem => item.ImageUrl)" alt="Alternate Text" />
+				</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>
+
+<style>
+	/* General table styles */
+	table {
+		width: 100%; /* Ensures table fills the container */
+		border-collapse: collapse; /* Removes borders between cells */
+		background-color: #f5f5f5; /* Light background color */
+	}
+
+	th, td {
+		padding: 10px 15px; /* Consistent padding for cells */
+		border: 1px solid #ddd; /* Thin border for separation */
+	}
+
+	th {
+		background-color: #e0f2ff; /* Light blue background for headers */
+		font-weight: bold; /* Bold headers for emphasis */
+	}
+
+	/* Specific styles for elements within the table */
+	a {
+		color: #333; /* Darker text color for links */
+		text-decoration: none; /* Remove default underlining for links */
+	}
+
+		a:hover {
+			text-decoration: underline; /* Underline links on hover */
+		}
+
+	td:nth-child(2) { /* Cell for date of birth */
+		text-align: center; /* Center date for readability */
+	}
+
+	td:nth-child(6) { /* Cell for image */
+		text-align: center; /* Center image for better presentation */
+	}
+
+	td:nth-child(7) { /* Cell for actions */
+		text-align: right; /* Right-align action buttons for better visual hierarchy */
+	}
+
+	/* Optional: Striped rows for visual interest */
+	tr:nth-child(even) {
+		background-color: #fff; /* Lighter background color for even rows */
+	}
+
+	/* Optional: Responsive table for smaller screens */
+</style>
