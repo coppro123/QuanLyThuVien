@@ -48,12 +48,11 @@
 						<div class="card-body">
 							<div style="height: 56px">
 								<a class="nav-link p-0" asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
-									<h5 style="font-weight: 700" class="card-title">@Truncate(item.Title, 29)</h5> <!-- Limiting title to 20 characters -->
+									<h5 style="font-weight: 600" class="card-title">@Truncate(item.Title, 29)</h5> <!-- Limiting title to 20 characters -->
 								</a>
 							</div>
-							<p class="card-text">Tác giả: @item.Author</p>
-							<p class="card-text">Thể loại: @item.Category.Name</p>
-							<p class="card-text">Số lượng còn lại: @item.Quantity</p>
+							
+							<p class="card-text">Có ở thư viện: @item.Quantity</p>
 						</div>
 					</div>
 				</div>

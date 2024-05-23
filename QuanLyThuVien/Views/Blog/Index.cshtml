@@ -12,9 +12,6 @@
 	var firstBlog = blogs.FirstOrDefault();
 	var secondToFive = blogs.Skip(1).Take(4).ToList(); // Get the second to fifth blog posts
 	var restBlog = blogs.Skip(5).ToList(); // Get the rest of the blog posts
-
-
-
 }
 
 <!-- Your HTML code for displaying blog posts -->
@@ -26,7 +23,7 @@
 	<div class="row container-main-blog">
 
 		<div class="col-md-6 text-danger">
-			<img class="img-fluid" style="max-width: 100%;" src="@firstBlog.ImageUrl" alt="Image 1" />
+			<img class="img-fluid" style="max-width: 100%; max-height: 356px" src="@firstBlog.ImageUrl" alt="Image 1" />
 			<div style="margin: 20px 0"></div>
 			<a asp-action="Details" asp-controller="Blog" asp-route-id="@firstBlog.Id">
 				<h1>@firstBlog.Title</h1>
@@ -96,46 +93,4 @@
 			height: 100px;
 			object-fit: cover;
 		}
-
 	</style>
-
-	<p>
-		
-	</p>
-	<table class="table">
-		<thead>
-			<tr>
-				<th>
-					@Html.DisplayNameFor(model => model.Title)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.Content)
-				</th>
-
-				<th>
-					@Html.DisplayNameFor(model => model.ImageUrl)
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in Model)
-			{
-				<tr>
-					<td>
-						@Html.DisplayFor(modelItem => item.Title)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Content)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.ImageUrl)
-					</td>
-					<td>
-						<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-						<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-						<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-					</td>
-				</tr>
-			}
-		</tbody>
-	</table>

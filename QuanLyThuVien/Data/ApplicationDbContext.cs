@@ -4,7 +4,7 @@ using QuanLyThuVien.Models;
 
 namespace QuanLyThuVien.Data
 {
-	public class ApplicationDbContext : IdentityDbContext
+	public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 	{
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 			: base(options)
@@ -19,5 +19,9 @@ namespace QuanLyThuVien.Data
 
 		public DbSet<ListImage> ListImages { get; set; }	
 	    public DbSet <Blog> Blog { get; set; }
+
+		public DbSet<Comment> Comment { get; set; }
+
+		public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 	}
 }

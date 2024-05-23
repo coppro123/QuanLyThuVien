@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,16 +14,22 @@ namespace QuanLyThuVien.Controllers
     public class BlogController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BlogController(ApplicationDbContext context)
+        public BlogController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Blog
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Blog.ToListAsync());
+            var blogs = await _context.Blog
+                .Include(p => p.ApplicationUser)
+                .ToListAsync();
+
+            return View(blogs);
         }
 
         // GET: Blog/Details/5
@@ -34,6 +41,7 @@ namespace QuanLyThuVien.Controllers
             }
 
             var blog = await _context.Blog
+                .Include(p => p.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (blog == null)
             {
@@ -54,15 +62,27 @@ namespace QuanLyThuVien.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ImageUrl,Content")] Blog blog)
+        public async Task<IActionResult> Create(Blog blog)
         {
+
+            // Set UserId to the current user's name
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Vui lòng đăng nhập hoặc đăng ký để tạo bài viết");
+                return View(blog);
+            }
+            blog.UserId = user.Id;
+
             if (ModelState.IsValid)
             {
-                _context.Add(blog);
+                _context.Blog.Add(blog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(blog);
+
         }
 
         // GET: Blog/Edit/5
@@ -134,20 +154,47 @@ namespace QuanLyThuVien.Controllers
             return View(blog);
         }
 
-        // POST: Blog/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var blog = await _context.Blog.FindAsync(id);
-            if (blog != null)
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
             {
-                _context.Blog.Remove(blog);
+                ModelState.AddModelError("", "Vui lòng đăng nhập hoặc đăng ký để xóa bài viết");
+                return View();
             }
 
-            await _context.SaveChangesAsync();
+            var blog = await _context.Blog.FindAsync(id);
+            if (blog == null)
+            {
+                ModelState.AddModelError("", "Bài viết không tồn tại");
+                return View();
+            }
+
+            if (blog.UserId != user.Id)
+            {
+                ModelState.AddModelError("", "Bạn không được quyền xóa bài viết của người khác");
+                return View();
+            }
+
+            _context.Blog.Remove(blog);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the error (uncomment ex variable name and write a log)
+                ModelState.AddModelError("", "Lỗi khi xóa bài viết. Vui lòng thử lại.");
+                return View();
+            }
+
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool BlogExists(int id)
         {

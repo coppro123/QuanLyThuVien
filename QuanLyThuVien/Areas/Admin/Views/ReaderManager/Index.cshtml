@@ -9,7 +9,9 @@
 <table class="table">
 	<thead>
 		<tr>
-
+			<th>
+				Mã đọc giả
+			</th>
 			<th>
 				Tên
 			</th>
@@ -35,6 +37,9 @@
 		@foreach (var item in Model)
 		{
 			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Id)
+				</td>
 
 				<td>
 					@Html.DisplayFor(modelItem => item.FullName)

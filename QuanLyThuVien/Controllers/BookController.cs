@@ -21,19 +21,26 @@ namespace QuanLyThuVien.Controllers
 		// GET: Book
 		public async Task<IActionResult> Index(string searchString)
 		{
-			var products = _bookRepository.GetAll();
-			var categories = _categoryRepository.GetAll();
+			// Fetch data from the database without applying the filter
+			var products = await _bookRepository.GetAll().ToListAsync();
+			var categories = await _categoryRepository.GetAll().ToListAsync();
 
 			if (!String.IsNullOrEmpty(searchString))
 			{
-				products = products.Where(s => s.Title.Contains(searchString));
+				// Normalize the search string
+				string normalizedSearchString = StringUtils.RemoveDiacritics(searchString.ToLower());
+
+				// Apply the filter in memory
+				products = products.Where(s =>
+					StringUtils.RemoveDiacritics(s.Title.ToLower()).Contains(normalizedSearchString)
+				).ToList();
 			}
 
-			var filteredProducts = await products.ToListAsync();
-
 			ViewBag.Categories = new SelectList(categories, "Id", "Name");
-			return View(filteredProducts);
+			return View(products);
 		}
+
+
 
 		[HttpGet("[controller]/FindByCategory/{id}")]
 		public async Task<IActionResult> FindByCategory(int id)

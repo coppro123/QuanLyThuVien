@@ -45,21 +45,29 @@ namespace QuanLyThuVien.Areas.Admin.Controllers
             return View(loan);
         }
 
-        // GET: Book/Create
-        public async Task<IActionResult> Create()
-        {
-            var readers = await _readerRepository.GetAllAsync();
-            var books = await _bookRepository.GetAllAsync();
+		// GET: Book/Create
+		public async Task<IActionResult> Create()
+		{
+			var readers = await _readerRepository.GetAllAsync();
+			var books = await _bookRepository.GetAllAsync();
 
-            ViewBag.Readers = new SelectList(readers, "Id", "FullName");
-            ViewBag.Books = new SelectList(books, "Id", "Title");
-            return View();
-        }
+			// Create a new list where each reader has an Id and a concatenated display name
+			var readerSelectListItems = readers.Select(r => new
+			{
+				Id = r.Id,
+				DisplayName = $"Mã đọc giả: {r.Id} - {r.FullName}"
+			});
 
-        // POST: Book/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+			ViewBag.Readers = new SelectList(readerSelectListItems, "Id", "DisplayName");
+			ViewBag.Books = new SelectList(books, "Id", "Title");
+			return View();
+		}
+
+
+		// POST: Book/Create
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
         public async Task<IActionResult> Create(Loan loan)
         {
             var readers = await _readerRepository.GetAllAsync();
