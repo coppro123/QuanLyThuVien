@@ -61,10 +61,17 @@
 							Mượn/Trả Sách
 						</a>
 
+						<a class="nav-link" asp-area="Admin" asp-controller="BlogManager" asp-action="Index">
+							<div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
+							Quản lý bài viết
+						</a>
+
 						<a class="nav-link" asp-area="" asp-controller="Book" asp-action="Index">
 							<div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
 							Exit
 						</a>
+
+
 
 					</div>
 				</div>
@@ -74,8 +81,8 @@
 		</div>
 		<div id="layoutSidenav_content">
 			<main>
-				<div class="container">					
-						@RenderBody()										
+				<div class="container">
+					@RenderBody()
 				</div>
 			</main>
 			<footer class="py-4 bg-light mt-auto">

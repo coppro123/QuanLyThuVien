@@ -23,5 +23,7 @@ namespace QuanLyThuVien.Data
 		public DbSet<Comment> Comment { get; set; }
 
 		public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
+		public DbSet<Contact> Contacts { get; set; }
 	}
 }

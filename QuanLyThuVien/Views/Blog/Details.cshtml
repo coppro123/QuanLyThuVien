@@ -4,28 +4,64 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
 
-<div>
-    <h4>Blog</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            Email Author
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ApplicationUser.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.Raw(Model.Content)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model?.Id">Delete</a> |
-    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 2.5em;
+        margin: 0;
+        color: #333;
+    }
+
+    h3 {
+        font-size: 1.2em;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .content {
+        font-size: 1em;
+        color: #444;
+    }
+
+    a {
+        color: #3498db;
+        text-decoration: none;
+    }
+
+        a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="container">
+    <div class="header">
+        <h1>@Html.DisplayFor(model => model.Title)</h1>
+        <hr />
+        <h3>Tác giả: @Html.DisplayFor(model => model.ApplicationUser.Email)</h3>
+    </div>
+
+    <div class="content">
+        @Html.Raw(Model.Content)
+    </div>
 </div>

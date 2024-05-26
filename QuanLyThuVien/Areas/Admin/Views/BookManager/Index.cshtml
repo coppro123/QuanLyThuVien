@@ -2,7 +2,6 @@
 
 @{
 	ViewData["Title"] = "Index";
-
 }
 
 <p class="">
@@ -32,7 +31,7 @@
 			<th>
 				@Html.DisplayNameFor(model => model.ImageUrl)
 			</th>
-			<th></th>
+			
 		</tr>
 	</thead>
 	<tbody>
@@ -48,7 +47,7 @@
 					@Html.DisplayFor(modelItem => item.Author)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Publisher.Id)
+					@Html.DisplayFor(modelItem => item.Publisher.Name)
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.YearPublished)
@@ -64,9 +63,7 @@
 				<td>
 					<img style="max-height: 100px" src="@item.ImageUrl" alt="Alternate Text" />
 				</td>
-				<td>
-					<a class="btn btn-primary " asp-action="Edit" asp-route-id="@item.Id">Edit</a>								
-				</td>
+				
 			</tr>
 		}
 	</tbody>
@@ -86,19 +83,10 @@
 		text-align: left; /* Left-align text by default */
 	}
 
-	th {
-		background-color: #e0f2ff; /* Light blue background for headers */
+	th { /* Vibrant blue background for headers */
+		color: green; /* White text for contrast */
 		font-weight: bold; /* Bold headers for emphasis */
 	}
-
-	/* Specific styles for elements within the table */
-	.text-decoration-none {
-		color: inherit; /* Inherit text color from parent */
-	}
-
-		.text-decoration-none:hover {
-			text-decoration: underline; /* Underline links on hover */
-		}
 
 	td:nth-child(6) { /* Cell for quantity */
 		text-align: center; /* Center quantity for better visibility */
@@ -113,5 +101,4 @@
 	tr:nth-child(even) {
 		background-color: #fff; /* Lighter background color for even rows */
 	}
-
 </style>

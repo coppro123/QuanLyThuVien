@@ -27,7 +27,8 @@ namespace QuanLyThuVien.Controllers
         {
             var blogs = await _context.Blog
                 .Include(p => p.ApplicationUser)
-                .ToListAsync();
+				.OrderByDescending(p => p.Id)
+				.ToListAsync();
 
             return View(blogs);
         }
@@ -106,8 +107,16 @@ namespace QuanLyThuVien.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Content")] Blog blog)
+        public async Task<IActionResult> Edit(int id, Blog blog)
         {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Vui lòng đăng nhập hoặc đăng ký để sửa bài viết");
+                return View();
+            }          
+           
             if (id != blog.Id)
             {
                 return NotFound();
@@ -117,7 +126,20 @@ namespace QuanLyThuVien.Controllers
             {
                 try
                 {
-                    _context.Update(blog);
+                    var existingProduct =  _context.Blog.FirstOrDefault(p => p.Id == id);
+
+                    if (existingProduct.UserId != user.Id)
+                    {
+                        ModelState.AddModelError("", "Bạn không được quyền sửa bài viết của người khác");
+                        return View();
+                    }
+
+                    existingProduct.Title = blog.Title;
+                    existingProduct.ImageUrl = blog.ImageUrl;
+                    existingProduct.Content = blog.Content;
+                    existingProduct.UserId = blog.UserId;
+
+					_context.Blog.Update(existingProduct);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

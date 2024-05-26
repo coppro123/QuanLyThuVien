@@ -1,0 +1,82 @@
+﻿@model IEnumerable<QuanLyThuVien.Models.Blog>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+	<a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Title)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ImageUrl)
+			</th>
+			<th>
+				Người dùng
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Title)
+				</td>
+				<td>
+					<img style="max-width: 75px" src="@Html.DisplayFor(modelItem => item.ImageUrl)" alt="Alternate Text" />
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ApplicationUser.Email)
+				</td>
+				<td>
+					<a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+					<a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+					<a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<style>
+	/* General table styles */
+	table {
+		width: 100%; /* Ensures table fills the container */
+		border-collapse: collapse; /* Removes borders between cells */
+		background-color: #f5f5f5; /* Light background color */
+	}
+
+	th, td {
+		padding: 10px 15px; /* Consistent padding for cells */
+		border: 1px solid #ddd; /* Thin border for separation */
+		text-align: left; /* Left-align text by default */
+	}
+
+	th {
+		background-color: #e0f2ff; /* Light blue background for headers */
+		font-weight: bold; /* Bold headers for emphasis */
+	}
+
+	td:nth-child(6) { /* Cell for quantity */
+		text-align: center; /* Center quantity for better visibility */
+	}
+
+	td img {
+		max-width: 100%; /* Image scales proportionally within cell */
+		height: auto; /* Maintain aspect ratio of image */
+	}
+
+	/* Optional: Striped rows for visual interest */
+	tr:nth-child(even) {
+		background-color: #fff; /* Lighter background color for even rows */
+	}
+</style>
